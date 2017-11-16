@@ -1,0 +1,76 @@
+version: '3'
+
+networks: 
+  hydra-net:
+  scim-net:
+  front-net:
+
+services:
+
+  hydra:
+    build:
+      context: ./hydra
+    networks: 
+      - hydra-net
+      - front-net
+    volumes:
+      - hydra-volume:/root
+    ports:
+      - "4444:4444"
+    environment:
+      - LOG_LEVEL=debug
+      - ISSUER=http://localhost:4444
+      - CONSENT_URL=http://localhost:3000/consent
+      - DATABASE_URL=postgres://hydra:secret@hydra-postgresd:5432/hydra?sslmode=disable
+      - FORCE_ROOT_CLIENT_CREDENTIALS=admin:demo-password
+      - SYSTEM_SECRET=some-very-insecure-secret
+    restart: unless-stopped
+
+  hydra-postgresd:
+    image: postgres:9.6
+    networks: 
+      - hydra-net
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=hydra
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=hydra
+
+  consent:
+    build:
+      context: ./consent-app
+    networks: 
+      - front-net
+      - scim-net
+    environment:
+      - HYDRA_URL=http://hydra:4444
+      - HYDRA_CLIENT_ID=consent_app
+      - HYDRA_CLIENT_SECRET=thisisthesecret
+    links:
+      - hydra
+    ports:
+      - "3000:3000"
+    restart: unless-stopped   
+
+  scim:
+    build:
+      context: ./scim/
+    networks: 
+      - scim-net
+    depends_on:
+      - storage
+
+  storage:
+    build:
+      context: ./mongo-init
+    environment:
+      - MONGO_INITDB_DATABASE=scim
+    networks:
+      - scim-net
+    expose:
+      - "27017"
+    
+volumes:
+  hydra-volume:
+    driver: local

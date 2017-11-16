@@ -1,0 +1,21 @@
+{
+	"client_name": "Consent_app",
+	"grant_types": [
+		"implicit",
+		"refresh_token",
+		"authorization_code",
+		"password",
+		"client_credentials"
+	],
+	"id": "consent_app",
+	"client_secret": "thisisthesecret",
+	"redirect_uris": [
+		"http://localhost:4445/callback"
+	],
+	"response_types": [
+		"id_token",
+		"code",
+		"token"
+	],
+    "scope": "hydra.* openid offline email preferredLanguage hydra"
+}

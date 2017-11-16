@@ -1,0 +1,14 @@
+{
+	"actions": [
+		"\u003c.*\u003e"
+	],
+	"description": "Consent app policy",
+	"effect": "allow",
+	"id": "consent-policy",
+	"resources": [
+		"rn:hydra:\u003c.*\u003e"
+	],
+	"subjects": [
+		"consent_app"
+	]
+}
