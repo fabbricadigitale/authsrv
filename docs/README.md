@@ -29,7 +29,7 @@ Type: **GET**
 Return: Redirect to consent_app/login page
 
 ```http
-http://oauth2_endpoint/oauth2/auth?client_id=client_app&redirect_uri=http://localhost:4445/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
+http://oauth2_endpoint/oauth2/auth?client_id=client_app&redirect_uri=client_app_endpoint/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
 ```
 
 | **URI Parameter**  | Description  |
