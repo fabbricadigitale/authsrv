@@ -17,7 +17,7 @@ The Authorization Code Grant flow has the following steps:
 
 ### Making request
 
-User Agent requests for a managed endpoint. The client_app opens a browser tab with the authorization request.
+User Agent requests for a managed endpoint. The client_app redirects to the authorization request.
 
 Type: **GET**
 
@@ -64,9 +64,6 @@ Return: Requested token
 ```http
 http://localhost:4445/callback&code=code_id&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
 ```
-
-
-
 
 # Starting docker
 
