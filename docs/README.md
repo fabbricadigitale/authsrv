@@ -15,13 +15,14 @@ The Authorization Code Grant flow has the following steps:
 
 ## Obtaining Access Token
 
-### Legend:
+### Making request
+
+Terminology:
+
 * **user agent**: The "agent" the user is using to access an app that requires OAuth2 tokens to make calls to a protected API or that requires OpenID Connect tokens. Typically, this is a browser or a mobile app.
 * **client_app**: This could be a server side app, a single page app (web app), or a mobile app. In the case of a mobile app, the **user agent** is also the client app.
 
-### Making request
-
-**user agent** requests for a managed API. The **client_app** redirects to the authorization request.
+The **user agent** requests for a managed API. The **client_app** redirects to the authorization request.
 
 Type: **GET**
 
@@ -40,20 +41,19 @@ http://oauth2_endpoint/oauth2/auth?client_id=client_app&redirect_uri=http://loca
 | state (*required*) | Provides any state that might be useful to your application when the user is redirected back to your application. This parameter will be added to the redirect URI exactly as your application specifies |
 | nonce (*optional*) | A random string unique for a request |
 
-
 ### Get the consent
 
 Authorization endpoint receives the authorization request, authenticates the user and obtains authorization.
 The **client\_app** receives the *consent_id*, logs user in and redirect to consent list page.
 
-**Note** about the scopes.
+Note about the scopes.
 
 * offline: Include this scope if you wish to receive a refresh token
 * openid: Include this scope if you wish to perform an OpenID Connect request.
         
 ### Requesting the authorization code
 
-**client\_app** request the authorization code
+The **client\_app** request the authorization code
 
 type: **GET**
 
@@ -102,10 +102,6 @@ To request the refresh token it's necessary to consent the *offline* scope
    "ID Token":""
 }
 ```
-
-
-
-
 
 # Starting docker
 
