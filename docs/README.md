@@ -15,55 +15,97 @@ The Authorization Code Grant flow has the following steps:
 
 ## Obtaining Access Token
 
+### Legend:
+* **user agent**: The "agent" the user is using to access an app that requires OAuth2 tokens to make calls to a protected API or that requires OpenID Connect tokens. Typically, this is a browser or a mobile app.
+* **client_app**: This could be a server side app, a single page app (web app), or a mobile app. In the case of a mobile app, the **user agent** is also the client app.
+
 ### Making request
 
-User Agent requests for a managed endpoint. The client_app redirects to the authorization request.
+**user agent** requests for a managed API. The **client_app** redirects to the authorization request.
 
 Type: **GET**
 
 Return: Redirect to consent_app/login page
 
 ```http
-http://hydra:4444/oauth2/auth?client_id=client_app&redirect_uri=http://localhost:4445/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
+http://oauth2_endpoint/oauth2/auth?client_id=client_app&redirect_uri=http://localhost:4445/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
 ```
 
 | **URI Parameter**  | Description  |
 |---|---|
-| client_id (*required*) | identification of your client_app  |
+| client_id (*required*) | identification of your **client_app**  |
 | redirect_url (*required*) | where you should send after user grants or denies consent  |
 | response_type (*required*)  | identify the flow type. For **Authorization Code Grant** use `code`  |
-| scopes (*required*) | A delimited list of the permissions you are requesting |
+| scopes (*required*) | A delimited list of the permissions you are requesting (in this implementation *openid*, *offline* and *email* scopes are required.) |
 | state (*required*) | Provides any state that might be useful to your application when the user is redirected back to your application. This parameter will be added to the redirect URI exactly as your application specifies |
 | nonce (*optional*) | A random string unique for a request |
+
 
 ### Get the consent
 
 Authorization endpoint receives the authorization request, authenticates the user and obtains authorization.
-The client_app receives the *consent_id*, logs user in and redirect to consent list page.
+The **client\_app** receives the *consent_id*, logs user in and redirect to consent list page.
+
+**Note** about the scopes.
+
+* offline: Include this scope if you wish to receive a refresh token
+* openid: Include this scope if you wish to perform an OpenID Connect request.
         
-###  Redirect back, requesting for the authorization code
+### Requesting the authorization code
 
-Client receives the authorization code from the redirect URI
-
-type: **GET**
-
-Return: **code** to request an id_token
-
-```http
-http://hydra:4444/oauth2/auth?client_id=client_app&redirect_uri=http://localhost:4445/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo&consent_id
-```
-
-### OAuth2 redirects to managed endpoint
-
-Client_app presents the authorization code at `authsrv` that validates the authorization code and issues the tokens requested
+**client\_app** request the authorization code
 
 type: **GET**
 
-Return: Requested token 
+Return: Authorization code
 
 ```http
-http://localhost:4445/callback&code=code_id&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
+http://oauth2_endpoint/oauth2/auth?client_id=admin&state=qwertyuiop&scope=offline+openid+email+preferredLanguage&response_type=code&consent=consent_id
 ```
+
+### Requesting access_token
+
+The **client\_app** presents the authorization code at `authsrv` that validates the authorization code and issues the tokens requested
+
+Type: **POST**
+
+Return: Requested **access\_token**
+
+```http
+http://oauth2_endpoint/oauth2/token
+```
+
+```json
+{  
+   "AccessToken":"ZBQAPjXdAE2ZI0piaqEZWOXn1_moS8bze4Xcyopnqfc.Lv1yJpLQeXBxYDHuDAYCYAD0h2Ognax83Vbr-ta7a4U",
+   "TokenType":"bearer",
+   "RefreshToken":"",
+   "Expiry":"2017-11-20 12:12:20.545790417 +0000 UTC m=+3915.105349933",
+   "ID Token":"eyJ..."
+}
+```
+
+The **client\_app** stores **access\_token** and will use it in the following request for managed API.
+
+## Refresh Token
+
+An access token intentionally is short lived. This is an important security mechanism of OAuth 2.0.
+
+To request the refresh token it's necessary to consent the *offline* scope
+
+```json
+{  
+   "AccessToken":"hGQ3flUzzq1ByFwJM0-aOifpVE3fvfuYJiBHvshQGwo.eMLGmeAl5KWw4UG1yIUYsgo8_Ud0wuJfvblyQAQcBB4",
+   "TokenType":"bearer",
+   "RefreshToken":"p6pZZ15aieVQ-rh-8hVJi8vPfUNz-rD1bbICWEMK-1I.8wURLB92eoQivieNSHUJdZe7KTiGoWudswTg4-wkbyc",
+   "Expiry":"2017-11-20 12:49:18.516875355 +0000 UTC m=+5499.676643883",
+   "ID Token":""
+}
+```
+
+
+
+
 
 # Starting docker
 
