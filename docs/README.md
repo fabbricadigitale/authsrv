@@ -29,13 +29,13 @@ Type: **GET**
 Return: Redirect to consent_app/login page
 
 ```http
-http://oauth2_endpoint/oauth2/auth?client_id=client_app&redirect_uri=client_app_endpoint/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
+http://oauth2_endpoint/oauth2/auth?client_id=client_app&redirect_uri=redirect_url/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
 ```
 
 | **URI Parameter**  | Description  |
 |---|---|
 | client_id (*required*) | identification of your **client_app**  |
-| redirect_url (*required*) | where you should send after user grants or denies consent  |
+| redirect_url (*required*) | where you should send after user grants or denies consent. It's defined inside the **client\_app**  |
 | response_type (*required*)  | identify the flow type. For **Authorization Code Grant** use `code`  |
 | scopes (*required*) | A delimited list of the permissions you are requesting (in this implementation *openid*, *offline* and *email* scopes are required.) |
 | state (*required*) | Provides any state that might be useful to your application when the user is redirected back to your application. This parameter will be added to the redirect URI exactly as your application specifies |
@@ -102,6 +102,15 @@ To request the refresh token it's necessary to consent the *offline* scope
    "ID Token":""
 }
 ```
+
+**Note**
+
+In this implementation the **client\_app** needs a client_secret to authenticate to OAuth2 endpoint. 
+It is a SECURITY ISSUE because you never put credentials in distribuited code. Next implementations will provide a public **client\_app** without client_secret.
+
+The **client\_app** credential used are:
+* client_id: *client\_app*
+* client_secret: *whatasecret*
 
 # Starting docker
 
