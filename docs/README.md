@@ -29,7 +29,7 @@ Type: **GET**
 Return: Redirect to consent_app/login page
 
 ```http
-http://oauth2_endpoint/oauth2/auth?client_id=my-id&redirect_uri=my-id/callback&state=demostatedemostatedemo&scope=openid+offline+email&response_type=code
+http://oauth2_endpoint/oauth2/auth?client_id=my-id&state=demostatedemostatedemo&scope=openid+offline+email&response_type=code
 ```
 
 | **URI Parameter**  | Description  |
