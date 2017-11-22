@@ -29,45 +29,45 @@ Type: **GET**
 Return: Redirect to consent_app/login page
 
 ```http
-http://oauth2_endpoint/oauth2/auth?client_id=client_app&redirect_uri=redirect_url/callback&response_type=code&scope=offline+openid+email+preferredLanguage&state=demostatedemostatedemo&nonce=demostatedemostatedemo
+http://oauth2_endpoint/oauth2/auth?client_id=my-id&state=demostatedemostatedemo&scope=openid+offline+email&response_type=code
 ```
 
 | **URI Parameter**  | Description  |
 |---|---|
-| client_id (*required*) | identification of your **client_app**  |
+| client_id (*required*) | identification of your **client\_app**; (**IMPORTANT**: in this case we use **my-id** as client_id) |
 | redirect_url (*required*) | where you should send after user grants or denies consent. It's defined inside the **client\_app**  |
 | response_type (*required*)  | identify the flow type. For **Authorization Code Grant** use `code`  |
 | scopes (*required*) | A delimited list of the permissions you are requesting (in this implementation *openid*, *offline* and *email* scopes are required.) |
-| state (*required*) | Provides any state that might be useful to your application when the user is redirected back to your application. This parameter will be added to the redirect URI exactly as your application specifies |
+| state (*required*) | Provides any state that might be useful to your application when the user is redirected back to your application. This parameter will be added to the redirect URI exactly as your application specifies (it's a random string) |
 | nonce (*optional*) | A random string unique for a request |
 
-### Get the consent
+### Login and consent scopes
 
-Authorization endpoint receives the authorization request, authenticates the user and obtains authorization.
-The **client\_app** receives the *consent_id*, logs user in and redirect to consent list page.
+Authorization endpoint receives the authorization request, authenticates the user and obtains authorization.  
+The **client\_app** is redirected to the **consent**; this is a web view, showing the login page for the user authentication. If the login has success, the user has to choose the scopes he wants to give access to and, in the end, the **consent** returns the authorization code to the **client\_app**. 
 
 Note about the scopes.
 
 * offline: Include this scope if you wish to receive a refresh token
 * openid: Include this scope if you wish to perform an OpenID Connect request.
-        
-### Requesting the authorization code
-
-The **client\_app** request the authorization code
-
-type: **GET**
-
-Return: Authorization code
-
-```http
-http://oauth2_endpoint/oauth2/auth?client_id=admin&state=qwertyuiop&scope=offline+openid+email+preferredLanguage&response_type=code&consent=consent_id
-```
 
 ### Requesting access_token
 
 The **client\_app** presents the authorization code at `authsrv` that validates the authorization code and issues the tokens requested
 
 Type: **POST**
+
+- In the Header
+
+    | **Key** | **Value** |
+    | :-----: | :-------: |
+    | Accept | application/json |
+    | Content-Type | application/x-www-form-urlencoded |
+    | Authorization | Basic "base64 encoded client_id (in this case **my-id**)" |
+    
+ - In the Body 
+   
+    grant_type=authorization_code&code="the code you got"
 
 Return: Requested **access\_token**
 
