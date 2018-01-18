@@ -6,9 +6,9 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	web "github.com/davidiamyou/go-scim/handlers"
-	"github.com/davidiamyou/go-scim/mongo"
-	scim "github.com/davidiamyou/go-scim/shared"
+	web "github.com/fabbricadigitale/go-scim/handlers"
+	"github.com/fabbricadigitale/go-scim/mongo"
+	scim "github.com/fabbricadigitale/go-scim/shared"
 	"github.com/go-zoo/bone"
 )
 
@@ -18,14 +18,14 @@ func initConfiguration() {
 		data: map[string]interface{}{
 			"scim.resources.user.locationBase":         "http://scim:4448/v2/Users",
 			"scim.resources.group.locationBase":        "http://scim:4448/v2/Groups",
-			"scim.resources.schema.internalRoot.path":  "../github.com/davidiamyou/go-scim/resources/schemas/root_internal.json",
-			"scim.resources.schema.internalUser.path":  "../github.com/davidiamyou/go-scim/resources/schemas/user_internal.json",
-			"scim.resources.schema.internalGroup.path": "../github.com/davidiamyou/go-scim/resources/schemas/group_internal.json",
-			"scim.resources.schema.user.path":          "../github.com/davidiamyou/go-scim/resources/schemas/user.json",
-			"scim.resources.schema.group.path":         "../github.com/davidiamyou/go-scim/resources/schemas/group.json",
-			"scim.resources.resourceType.user":         "../github.com/davidiamyou/go-scim/resources/resource_types/user.json",
-			"scim.resources.resourceType.group":        "../github.com/davidiamyou/go-scim/resources/resource_types/group.json",
-			"scim.resources.spConfig":                  "../github.com/davidiamyou/go-scim/resources/sp_config/sp_config.json",
+			"scim.resources.schema.internalRoot.path":  "../github.com/fabbricadigitale/go-scim/resources/schemas/root_internal.json",
+			"scim.resources.schema.internalUser.path":  "../github.com/fabbricadigitale/go-scim/resources/schemas/user_internal.json",
+			"scim.resources.schema.internalGroup.path": "../github.com/fabbricadigitale/go-scim/resources/schemas/group_internal.json",
+			"scim.resources.schema.user.path":          "../github.com/fabbricadigitale/go-scim/resources/schemas/user.json",
+			"scim.resources.schema.group.path":         "../github.com/fabbricadigitale/go-scim/resources/schemas/group.json",
+			"scim.resources.resourceType.user":         "../github.com/fabbricadigitale/go-scim/resources/resource_types/user.json",
+			"scim.resources.resourceType.group":        "../github.com/fabbricadigitale/go-scim/resources/resource_types/group.json",
+			"scim.resources.spConfig":                  "../github.com/fabbricadigitale/go-scim/resources/sp_config/sp_config.json",
 			"scim.protocol.itemsPerPage":               10,
 			"scim.protocol.uri.user":                   "/Users",
 			"scim.protocol.uri.group":                  "/Groups",
