@@ -109,6 +109,37 @@ To request the refresh token it's necessary to consent the *offline* scope
 }
 ```
 
+## Retrieve the JWK public key
+
+Type: **GET**
+
+- In the Header
+
+    | **Key** | **Value** |
+    | :-----: | :-------: |
+    | Authorization | Basic "base64 encoded client_id (in this case **my-id**)" |
+
+Return: **Public key** for signing
+
+```http
+http://oauth2_endpoint/keys/hydra.openid.id-token/public
+```
+
+```json
+{
+    "keys": [
+        {
+            "use": "sig",
+            "kty": "RSA",
+            "kid": "public",
+            "alg": "RS256",
+            "n": "ztKhv4h-JMIT3GYFEorp0IcVObw1nhciUtfKiAQSRqcsNOYDOH_W7kuEwMSJ-_AD7Gs26IoM6CsHdG2lhZzAtTBksjXdDUB6f5DP5iVluurxIHecJtjy5RYNaNgNlkKWnfUVSEDOS6XDW4I84-LjI5Rg6bWrSHH7RmVlMWTQjRnfOIYhcOLuyeC9LIJkXCMQ6lHo_chaFcP73MggXn91g6UiqfMs-ZrWVN8_M_YpBGNjUkJGcb0prL_jGkq0VchJJScZSjcC6T8wWaYJgd3GKCcVcUNzrV_hUw-pp00ca0RpEPWQQAn33fa9NBDAnBHEJXN2HR4WYGFZn3-Q_pHabdVcGu1ISWiiuqDSO_70cFXikLXzMKwzCGJPgNubdv51cuI5fcyA66MA62SRxdDZpp6O1DauOGUAK7IV5HYpCDavTBP2znpVraSWD1YBRWyDt-h03NmSUiMY6i_OA6_N1VfM_kBh2syF8-iJBByzaT28qNkTGYX6Ksh8W6ihdpDv7cbMZdAzQsDrwuNMPimK0RF2UHvqGRPsOTtd0tjDkhlsvKlHhKwgVedqMjOfGNT6FGdaBrwGuV9CFzp7LNr0Rb2TeDjqt9_OfmXfqIZnZQY7AEmO26ljvdENSTP7xyKP4Iz8voPr5TVfdd4gz-nXkQ_525I4-kXZHJwpSpQmFNk",
+            "e": "AQAB"
+        }
+    ]
+}
+```
+
 **Note**
 
 In this implementation the **client\_app** needs a client_secret to authenticate to OAuth2 endpoint. 
