@@ -12,7 +12,7 @@ RUN git clone https://github.com/ory/hydra/
 
 WORKDIR /go/src/github.com/ory/hydra
 
-RUN git checkout tags/v0.11.4
+RUN git checkout tags/v0.11.6
 
 RUN dep ensure
 
