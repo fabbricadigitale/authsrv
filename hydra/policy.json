@@ -9,7 +9,6 @@
 		"rn:hydra:\u003c.*\u003e"
 	],
 	"subjects": [
-		"my-id",
 		"consent_app"
 	]
 }
