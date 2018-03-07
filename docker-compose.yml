@@ -2,7 +2,7 @@ version: '3'
 
 networks: 
   hydra-net:
-  scim-net:
+  scimd-net:
   front-net:
 
 services:
@@ -42,7 +42,7 @@ services:
       context: ./consent-app
     networks: 
       - front-net
-      - scim-net
+      - scimd-net
     environment:
       - HYDRA_URL=http://hydra:4444
       - HYDRA_CLIENT_ID=consent_app
@@ -53,24 +53,24 @@ services:
       - "3000:3000"
     restart: unless-stopped   
 
-  scim:
-    build:
-      context: ./scim/
-    networks: 
-      - scim-net
-    depends_on:
-      - storage
-
   storage:
     build:
       context: ./mongo-init
     environment:
-      - MONGO_INITDB_DATABASE=scim
+      - MONGO_INITDB_DATABASE=scimd
     networks:
-      - scim-net
+      - scimd-net
     expose:
       - "27017"
-    
+      
+  scimd:
+    build:
+      context: ./scimd/
+    networks: 
+      - scimd-net
+    depends_on:
+      - storage
+  
 volumes:
   hydra-volume:
     driver: local

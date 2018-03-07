@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -57,16 +58,20 @@ func checkErrors(c *http.Response) error {
 func GetUserByCredential(username string, password string) (*Resource, error) {
 	userURL := url.URL{
 		Scheme: "http",
-		Host:   "scim:4448",
+		Host:   "scimd:8787",
 		Path:   "/v2/Users",
 	}
 
 	// TODO to avoid query injection user and password must be escaped!!!
 	query := url.Values{}
-	query.Add("filter", "(userName eq \""+username+"\") AND (password eq \""+password+"\")")
+
+	filter := fmt.Sprintf("userName eq \"%s\" and password eq \"%s\"", username, password)
+
+	query.Add("filter", filter)
 	userURL.RawQuery = query.Encode()
 
 	resp, err := http.Get(userURL.String())
+
 	// Error: server not available
 	if err != nil {
 		return nil, err
@@ -77,6 +82,7 @@ func GetUserByCredential(username string, password string) (*Resource, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	err2 := json.Unmarshal(body, &data)
 	if err2 != nil {
 		return nil, err2
