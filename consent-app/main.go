@@ -149,7 +149,7 @@ func handleConsent(w http.ResponseWriter, r *http.Request) {
 // The user hits this endpoint if he is not authenticated. In this example he can sign in with the credentials
 // buzz:lightyear
 func handleLogin(w http.ResponseWriter, r *http.Request) {
-	consentRequestId := r.URL.Query().Get("consent")
+	crID := r.URL.Query().Get("consent")
 
 	type Err struct {
 		Message error
@@ -170,7 +170,7 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		resource, err := GetUserByCredential(username, password)
 		if err != nil {
 			errText.Message = err
-			http.Redirect(w, r, "/login?consent="+consentRequestId, http.StatusAccepted)
+			http.Redirect(w, r, "/login?consent="+crID, http.StatusAccepted)
 			renderTemplate(w, "login.html", errText)
 			return
 		}
@@ -195,7 +195,7 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		// Redirect the user back to the consent endpoint. In a normal app, you would probably
 		// add some logic here that is triggered when the user actually performs authentication and is not
 		// part of the consent flow.
-		http.Redirect(w, r, "/consent?consent="+consentRequestId, http.StatusFound)
+		http.Redirect(w, r, "/consent?consent="+crID, http.StatusFound)
 		return
 	}
 
@@ -203,7 +203,7 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "login.html", struct {
 		*Err
 		ConsentRequestID string
-	}{Err: errText, ConsentRequestID: consentRequestId})
+	}{Err: errText, ConsentRequestID: crID})
 }
 
 func handleLogout(w http.ResponseWriter, r *http.Request) {
