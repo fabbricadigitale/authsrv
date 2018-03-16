@@ -32,7 +32,7 @@ func main() {
 	client, err = hydra.NewSDK(&hydra.Configuration{
 		ClientID:     env.Getenv("HYDRA_CLIENT_ID", "consent_app"),
 		ClientSecret: env.Getenv("HYDRA_CLIENT_SECRET", "thisisthesecret"),
-		EndpointURL:  env.Getenv("HYDRA_CLUSTER_URL", "https://hydra:4444"),
+		EndpointURL:  env.Getenv("HYDRA_CLUSTER_URL", "http://hydra:4444"),
 		Scopes:       []string{"hydra.* openid offline email preferredLanguage hydra"},
 	})
 	if err != nil {
@@ -52,9 +52,7 @@ func main() {
 
 	// Start http server
 	log.Println("Listening on :" + env.Getenv("PORT", "3000"))
-	// http.ListenAndServe(":"+env.Getenv("PORT", "3000"), n)
-	panic(http.ListenAndServeTLS(":"+env.Getenv("PORT", "3000"), "server.crt", "server.key", n))
-
+	http.ListenAndServe(":"+env.Getenv("PORT", "3000"), n)
 }
 
 // After pressing "click here", the Authorize Code flow is performed and the user is redirected to Hydra. Next, Hydra
