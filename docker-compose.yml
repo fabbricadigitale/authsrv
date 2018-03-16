@@ -19,8 +19,8 @@ services:
       - "4444:4444"
     environment:
       - LOG_LEVEL=debug
-      - ISSUER=https://localhost:4444
-      - CONSENT_URL=https://localhost:3000/consent
+      - ISSUER=http://localhost:4444
+      - CONSENT_URL=http://localhost:3000/consent
       - DATABASE_URL=postgres://hydra:secret@hydra-postgresd:5432/hydra?sslmode=disable
       - FORCE_ROOT_CLIENT_CREDENTIALS=admin:demo-password
       - SYSTEM_SECRET=some-very-insecure-secret
@@ -44,7 +44,7 @@ services:
       - front-net
       - scimd-net
     environment:
-      - HYDRA_URL=https://hydra:4444
+      - HYDRA_URL=http://hydra:4444
       - HYDRA_CLIENT_ID=consent_app
       - HYDRA_CLIENT_SECRET=thisisthesecret
     links:
