@@ -65,11 +65,21 @@ services:
       
   scimd:
     build:
-      context: ./scimd/
+      context: github.com/fabbricadigitale/scimd#develop
     networks: 
       - scimd-net
     depends_on:
       - storage
+    volumes:
+      - ./scimd/service_provider_config.json:/scimd/service_provider_config.json
+    environment:
+      - SCIMD_PORT=8787
+      - SCIMD_STORAGE_TYPE=mongo
+      - SCIMD_STORAGE_HOST=storage
+      - SCIMD_STORAGE_NAME=scimd
+      - SCIMD_STORAGE_COLL=resources
+      - SCIMD_SERVICE_PROVIDER_CONFIG=scimd/service_provider_config.json
+    command: --debug
   
 volumes:
   hydra-volume:
