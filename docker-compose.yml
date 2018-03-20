@@ -24,14 +24,14 @@ services:
       - DATABASE_URL=postgres://hydra:secret@hydra-postgresd:5432/hydra?sslmode=disable
       - FORCE_ROOT_CLIENT_CREDENTIALS=admin:demo-password
       - SYSTEM_SECRET=some-very-insecure-secret
+    depends_on:
+      - hydra-postgresd
     restart: unless-stopped
 
   hydra-postgresd:
     image: postgres:9.6
     networks: 
       - hydra-net
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_USER=hydra
       - POSTGRES_PASSWORD=secret
@@ -51,6 +51,8 @@ services:
       - hydra
     ports:
       - "3000:3000"
+    depends_on:
+      - hydra
     restart: unless-stopped   
 
   storage:
@@ -71,14 +73,13 @@ services:
     depends_on:
       - storage
     volumes:
-      - ./scimd/service_provider_config.json:/scimd/service_provider_config.json
+      - ./scimd/service_provider_config.json:/tmp/service_provider_config.json
     environment:
       - SCIMD_PORT=8787
-      - SCIMD_STORAGE_TYPE=mongo
       - SCIMD_STORAGE_HOST=storage
       - SCIMD_STORAGE_NAME=scimd
       - SCIMD_STORAGE_COLL=resources
-      - SCIMD_SERVICE_PROVIDER_CONFIG=scimd/service_provider_config.json
+      - SCIMD_SERVICEPROVIDERCONFIG=/tmp/service_provider_config.json
     command: --debug
   
 volumes:
